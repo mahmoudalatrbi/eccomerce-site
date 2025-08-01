@@ -1,0 +1,286 @@
+<!-- templates/orders/order_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}فاتورة الطلب #{{ order.id }} - متجري الإلكتروني{% endblock %}
+
+{% block content %}
+<!-- Invoice Card -->
+<div class="invoice-card">
+    <!-- Header -->
+    <div class="invoice-header text-center">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-store-alt me-2"></i>متجري الإلكتروني
+                </h2>
+                <p class="mb-0 opacity-75">فاتورة مبيعات</p>
+            </div>
+            <div class="col-md-4">
+                <h1 class="display-6 fw-bold mb-0">فاتورة</h1>
+                <p class="mb-0">#{{ order.id }}</p>
+            </div>
+            <div class="col-md-4">
+                <div class="status-badge 
+                    {% if order.status == 'pending' %}status-pending
+                    {% elif order.status == 'processing' %}status-processing
+                    {% elif order.status == 'shipped' %}status-shipped
+                    {% elif order.status == 'delivered' %}status-delivered
+                    {% elif order.status == 'cancelled' %}status-cancelled
+                    {% endif %}">
+                    <i class="fas 
+                        {% if order.status == 'pending' %}fa-clock
+                        {% elif order.status == 'processing' %}fa-cogs
+                        {% elif order.status == 'shipped' %}fa-shipping-fast
+                        {% elif order.status == 'delivered' %}fa-check-circle
+                        {% elif order.status == 'cancelled' %}fa-times-circle
+                        {% endif %} me-2"></i>
+                    {% if order.status == 'pending' %}قيد الانتظار
+                    {% elif order.status == 'processing' %}قيد المعالجة
+                    {% elif order.status == 'shipped' %}تم الشحن
+                    {% elif order.status == 'delivered' %}تم التسليم
+                    {% elif order.status == 'cancelled' %}ملغي
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Invoice Body -->
+    <div class="p-4">
+        <!-- معلومات العميل والطلب -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-user me-2"></i>معلومات العميل
+                        </h6>
+                        <p class="mb-2"><strong>الاسم:</strong> {{ order.first_name }} {{ order.last_name }}</p>
+                        <p class="mb-2"><strong>البريد الإلكتروني:</strong> {{ order.email }}</p>
+                        <p class="mb-2"><strong>العنوان:</strong> {{ order.address }}</p>
+                        <p class="mb-0"><strong>المدينة:</strong> {{ order.city }} - {{ order.postal_code }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-primary mb-3">
+                            <i class="fas fa-info-circle me-2"></i>معلومات الطلب
+                        </h6>
+                        <p class="mb-2"><strong>رقم الطلب:</strong> #{{ order.id }}</p>
+                        <p class="mb-2"><strong>تاريخ الطلب:</strong> {{ order.created|date:"d/m/Y H:i" }}</p>
+                        <p class="mb-2"><strong>آخر تحديث:</strong> {{ order.updated|date:"d/m/Y H:i" }}</p>
+                        <p class="mb-0"><strong>إجمالي المبلغ:</strong> <span class="price-tag">${{ order.total_amount }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- عناصر الطلب -->
+        <div class="card border-0">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-box me-2"></i>تفاصيل الطلب
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0 px-4 py-3">المنتج</th>
+                                <th class="border-0 text-center py-3">السعر</th>
+                                <th class="border-0 text-center py-3">الكمية</th>
+                                <th class="border-0 text-center py-3">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image %}
+                                                <img src="{{ item.product.image.url }}" 
+                                                     alt="{{ item.product.name }}" 
+                                                     class="rounded me-3" 
+                                                     style="width: 60px; height: 60px; object-fit: cover;">
+                                            {% else %}
+                                                <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center" 
+                                                     style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-image text-muted"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-1 fw-bold">{{ item.product.name }}</h6>
+                                                <small class="text-muted">{{ item.product.category.name }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center py-3">
+                                        <span class="fw-bold text-success">${{ item.price }}</span>
+                                    </td>
+                                    <td class="text-center py-3">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
+                                            {{ item.quantity }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center py-3">
+                                        <span class="fw-bold text-dark">${{ item.get_cost }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- الإجماليات -->
+        <div class="row mt-4">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+                <div class="card border-0" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>المجموع الفرعي:</span>
+                            <span class="fw-bold">${{ order.total_amount }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>الضريبة (0%):</span>
+                            <span class="fw-bold">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>الشحن:</span>
+                            <span class="fw-bold text-success">مجاني</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold">الإجمالي النهائي:</h6>
+                            <h6 class="fw-bold text-primary">${{ order.total_amount }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- معلومات إضافية -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-info mb-3">
+                            <i class="fas fa-truck me-2"></i>معلومات الشحن
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-clock text-warning me-2"></i>
+                                وقت التسليم المتوقع: 3-5 أيام عمل
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-shield-alt text-success me-2"></i>
+                                الطلب مؤمن ضد التلف والفقدان
+                            </li>
+                            <li>
+                                <i class="fas fa-phone text-primary me-2"></i>
+                                للاستفسار: +966 12 345 6789
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-success mb-3">
+                            <i class="fas fa-undo me-2"></i>سياسة الإرجاع
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                إرجاع مجاني خلال 30 يوم
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                استرداد كامل للمبلغ
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                لا توجد رسوم إضافية
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار العمليات -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'orders:order_list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>العودة لقائمة الطلبات
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% if order.status == 'pending' %}
+                        <button class="btn btn-outline-danger me-md-2" onclick="cancelOrder()">
+                            <i class="fas fa-times me-2"></i>إلغاء الطلب
+                        </button>
+                    {% endif %}
+                    <button class="btn btn-success" onclick="window.print()">
+                        <i class="fas fa-print me-2"></i>طباعة الفاتورة
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadPDF()">
+                        <i class="fas fa-download me-2"></i>تحميل PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- شكر العميل -->
+        <div class="text-center mt-5 p-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+            <h4 class="fw-bold mb-2">
+                <i class="fas fa-heart me-2"></i>شكراً لك على اختيارنا!
+            </h4>
+            <p class="mb-0">نقدر ثقتك بنا ونتطلع لخدمتك مرة أخرى</p>
+        </div>
+    </div>
+</div>
+
+<!-- Print Styles -->
+<style media="print">
+    body * {
+        visibility: hidden;
+    }
+    .invoice-card, .invoice-card * {
+        visibility: visible;
+    }
+    .invoice-card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+    }
+    .btn, .navbar, .footer {
+        display: none !important;
+    }
+</style>
+
+<script>
+function cancelOrder() {
+    if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟')) {
+        // إضافة كود إلغاء الطلب هنا
+        alert('تم إلغاء الطلب بنجاح');
+    }
+}
+
+function downloadPDF() {
+    // إضافة كود تحميل PDF هنا
+    alert('سيتم إضافة هذه الميزة قريباً');
+}
+</script>
+{% endblock %}

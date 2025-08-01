@@ -1,0 +1,75 @@
+<!-- templates/registration/register.html -->
+{% extends 'base.html' %}
+
+{% block title %}إنشاء حساب جديد{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field, errors in form.errors.items %}
+                                <strong>{{ field }}:</strong>
+                                {% for error in errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">اسم المستخدم:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" name="username" class="form-control" id="id_username" required>
+                        </div>
+                        <small class="form-text text-muted">مطلوب. 150 حرف أو أقل. أحرف وأرقام و @/./+/-/_ فقط.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">كلمة المرور:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password1" class="form-control" id="id_password1" required>
+                        </div>
+                        <small class="form-text text-muted">
+                            <ul class="mb-0">
+                                <li>كلمة المرور لا يمكن أن تكون مشابهة جداً لمعلوماتك الشخصية الأخرى.</li>
+                                <li>كلمة المرور يجب أن تحتوي على الأقل 8 أحرف.</li>
+                                <li>كلمة المرور لا يمكن أن تكون كلمة مرور شائعة الاستخدام.</li>
+                                <li>كلمة المرور لا يمكن أن تكون أرقام فقط.</li>
+                            </ul>
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password2" class="form-label">تأكيد كلمة المرور:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password2" class="form-control" id="id_password2" required>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-user-plus"></i> إنشاء الحساب
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>تملك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

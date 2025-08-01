@@ -1,0 +1,111 @@
+<!-- templates/products/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Home Page - My Store{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center mb-4">
+    <h1 class="display-5 fw-bold mb-3">
+        <i class="fas fa-gem me-2"></i>
+        Welcome to Our Store
+    </h1>
+    <p class="lead mb-4">Discover the best products at amazing prices</p>
+    <a href="{% url 'products:product_list' %}" class="btn btn-light btn-lg">
+        <i class="fas fa-shopping-bag me-2"></i>Shop Now
+    </a>
+</div>
+
+<!-- Categories Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="mb-4">
+            <i class="fas fa-th-large me-2 text-primary"></i>
+            Shop by Category
+        </h3>
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-lg-2 col-md-4 col-6 mb-3">
+                    <a href="{{ category.get_absolute_url }}" class="text-decoration-none">
+                        <div class="category-card text-center h-100 p-3">
+                            <div class="mb-2">
+                                {% if 'Electronics' in category.name or 'electronics' in category.name %}
+                                    <i class="fas fa-laptop fa-2x text-primary"></i>
+                                {% elif 'Clothing' in category.name or 'clothing' in category.name or 'Fashion' in category.name %}
+                                    <i class="fas fa-tshirt fa-2x text-success"></i>
+                                {% elif 'Books' in category.name or 'books' in category.name %}
+                                    <i class="fas fa-book fa-2x text-info"></i>
+                                {% elif 'Sports' in category.name or 'sports' in category.name %}
+                                    <i class="fas fa-dumbbell fa-2x text-warning"></i>
+                                {% elif 'Home' in category.name or 'home' in category.name %}
+                                    <i class="fas fa-home fa-2x text-danger"></i>
+                                {% elif 'Beauty' in category.name or 'beauty' in category.name %}
+                                    <i class="fas fa-spa fa-2x text-secondary"></i>
+                                {% else %}
+                                    <i class="fas fa-tag fa-2x text-primary"></i>
+                                {% endif %}
+                            </div>
+                            <h6 class="fw-bold text-dark">{{ category.name }}</h6>
+                            <small class="text-muted">{{ category.products.count }} products</small>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products -->
+<div class="row">
+    <div class="col-12">
+        <h3 class="mb-4">
+            <i class="fas fa-star me-2 text-warning"></i>
+            Featured Products
+        </h3>
+        <div class="row">
+            {% for product in featured_products %}
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                    <div class="product-card h-100">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body d-flex flex-column m-1">
+                            <small class="text-muted">{{ product.category.name }}</small>
+                            <h6 class="card-title fw-bold">{{ product.name }}</h6>
+                            <p class="card-text text-muted small flex-grow-1">{{ product.description|truncatewords:10 }}</p>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="price-tag">${{ product.price }}</span>
+                                    <small class="text-muted">Stock: {{ product.stock }}</small>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </a>
+                                    <a href="{% url 'cart:cart_add' product.id %}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No products available</h4>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

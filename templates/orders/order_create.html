@@ -1,0 +1,289 @@
+<!-- templates/orders/order_create.html -->
+{% extends 'base.html' %}
+
+{% block title %}إتمام الطلب{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- نموذج معلومات الشحن -->
+    <div class="col-lg-8 mb-4">
+        <div class="card border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-shipping-fast me-2"></i>معلومات الشحن والفوترة
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" id="orderForm">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>يرجى تصحيح الأخطاء التالية:</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ field }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- معلومات شخصية -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                <i class="fas fa-user me-2"></i>المعلومات الشخصية
+                            </h6>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label fw-bold">{{ form.first_name.label }} <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
+                                {{ form.first_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">{{ form.last_name.label }} <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">{{ form.email.label }} <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fas fa-envelope"></i></span>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- معلومات العنوان -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                <i class="fas fa-map-marker-alt me-2"></i>عنوان التسليم
+                            </h6>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.address.id_for_label }}" class="form-label fw-bold">{{ form.address.label }} <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fas fa-home"></i></span>
+                                {{ form.address }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.city.id_for_label }}" class="form-label fw-bold">{{ form.city.label }} <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fas fa-city"></i></span>
+                                {{ form.city }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.postal_code.id_for_label }}" class="form-label fw-bold">{{ form.postal_code.label }} <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fas fa-mail-bulk"></i></span>
+                                {{ form.postal_code }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- طرق الدفع -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                <i class="fas fa-credit-card me-2"></i>طريقة الدفع
+                            </h6>
+                            <div class="card bg-light border-0">
+                                <div class="card-body">
+                                    <div class="form-check p-3">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked>
+                                        <label class="form-check-label fw-bold" for="cod">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-hand-holding-usd me-2 text-success fa-2x"></i>
+                                                <div>
+                                                    <div>الدفع عند الاستلام</div>
+                                                    <small class="text-muted">ادفع نقداً عند وصول الطلب إليك</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- شروط وأحكام -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    أوافق على <a href="#" class="text-primary">الشروط والأحكام</a> و <a href="#" class="text-primary">سياسة الخصوصية</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                            <i class="fas fa-check-circle me-2"></i>تأكيد الطلب ومتابعة
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ملخص الطلب -->
+    <div class="col-lg-4">
+        <div class="card border-0 sticky-top" style="top: 20px;">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-receipt me-2"></i>ملخص الطلب
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- المنتجات -->
+                <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+                    {% for item in cart.items.all %}
+                        <div class="d-flex align-items-center mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" 
+                                     alt="{{ item.product.name }}" 
+                                     class="rounded me-3" 
+                                     style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center" 
+                                     style="width: 50px; height: 50px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            {% endif %}
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-bold small">{{ item.product.name }}</h6>
+                                <small class="text-muted">{{ item.product.category.name }}</small>
+                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                    <span class="badge bg-primary">{{ item.quantity }}x</span>
+                                    <span class="fw-bold text-success small">${{ item.get_cost }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- الحسابات -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>المجموع الفرعي:</span>
+                        <span class="fw-bold">${{ cart.get_total_price }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>الضريبة (0%):</span>
+                        <span class="fw-bold">$0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>الشحن:</span>
+                        <span class="fw-bold text-success">مجاني</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="fw-bold">الإجمالي:</h5>
+                        <h5 class="fw-bold"><span class="price-tag">${{ cart.get_total_price }}</span></h5>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- مميزات الخدمة -->
+            <div class="card-footer bg-light">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <i class="fas fa-truck text-success fa-2x mb-2"></i>
+                        <small class="d-block fw-bold">شحن سريع</small>
+                        <small class="text-muted">3-5 أيام</small>
+                    </div>
+                    <div class="col-4">
+                        <i class="fas fa-shield-alt text-primary fa-2x mb-2"></i>
+                        <small class="d-block fw-bold">دفع آمن</small>
+                        <small class="text-muted">محمي 100%</small>
+                    </div>
+                    <div class="col-4">
+                        <i class="fas fa-undo text-info fa-2x mb-2"></i>
+                        <small class="d-block fw-bold">إرجاع مجاني</small>
+                        <small class="text-muted">30 يوم</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- معلومات إضافية -->
+        <div class="card border-0 mt-3">
+            <div class="card-body">
+                <h6 class="fw-bold text-primary mb-3">
+                    <i class="fas fa-info-circle me-2"></i>معلومات هامة
+                </h6>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>سيتم تأكيد الطلب خلال ساعة</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>إمكانية تتبع الطلب عبر الموقع</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>خدمة عملاء متاحة 24/7</small>
+                    </li>
+                    <li>
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>ضمان استرداد المبلغ كاملاً</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// تحسين تجربة إرسال النموذج
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
+    
+    // التحقق من الشروط والأحكام
+    const termsCheckbox = document.getElementById('terms');
+    if (!termsCheckbox.checked) {
+        e.preventDefault();
+        alert('يرجى الموافقة على الشروط والأحكام');
+        return;
+    }
+    
+    // تغيير نص الزر
+    submitBtn.innerHTML = '<span class="loading-spinner me-2"></span>جاري معالجة الطلب...';
+    submitBtn.disabled = true;
+    
+    // إعادة تفعيل الزر في حالة فشل الإرسال
+    setTimeout(() => {
+        if (submitBtn.disabled) {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }, 10000);
+});
+
+// التحقق من صحة البيانات أثناء الكتابة
+document.querySelectorAll('input[required]').forEach(input => {
+    input.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+        }
+    });
+});
+</script>
+{% endblock %}

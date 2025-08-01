@@ -1,0 +1,209 @@
+<!-- templates/cart/cart_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}سلة التسوق - متجري الإلكتروني{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="fw-bold">
+            <i class="fas fa-shopping-cart me-2 text-primary"></i>سلة التسوق
+        </h2>
+        <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-right me-2"></i>متابعة التسوق
+        </a>
+    </div>
+    
+    {% if cart.items.all %}
+        <div class="row">
+            <!-- عناصر السلة -->
+            <div class="col-lg-8 mb-4">
+                <div class="card border-0">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">العناصر المختارة ({{ cart.items.count }})</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        {% for item in cart.items.all %}
+                            <div class="d-flex align-items-center p-4 {% if not forloop.last %}border-bottom{% endif %}">
+                                <!-- صورة المنتج -->
+                                <div class="me-3">
+                                    {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" 
+                                             alt="{{ item.product.name }}" 
+                                             class="rounded" 
+                                             style="width: 80px; height: 80px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-image fa-2x text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- تفاصيل المنتج -->
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1">{{ item.product.name }}</h6>
+                                    <small class="text-muted">{{ item.product.category.name }}</small>
+                                    <div class="d-flex align-items-center mt-2">
+                                        <span class="price-tag me-3">${{ item.product.price }}</span>
+                                        <small class="text-muted">الوحدة</small>
+                                    </div>
+                                </div>
+                                
+                                <!-- الكمية -->
+                                <div class="me-3">
+                                    <form method="post" action="{% url 'cart:update_cart' item.product.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <div class="input-group" style="width: 130px;">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="decreaseQuantity(this)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="number" 
+                                                   name="quantity" 
+                                                   value="{{ item.quantity }}" 
+                                                   min="1" 
+                                                   max="{{ item.product.stock }}" 
+                                                   class="form-control form-control-sm text-center"
+                                                   onchange="this.form.submit()">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="increaseQuantity(this)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <!-- الإجمالي -->
+                                <div class="me-3 text-center">
+                                    <div class="fw-bold text-success">${{ item.get_cost }}</div>
+                                    <small class="text-muted">الإجمالي</small>
+                                </div>
+                                
+                                <!-- زر الحذف -->
+                                <div>
+                                    <a href="{% url 'cart:cart_remove' item.product.id %}" 
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')"
+                                       title="حذف من السلة">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ملخص الطلب -->
+            <div class="col-lg-4">
+                <div class="card border-0 sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-calculator me-2"></i>ملخص الطلب
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>المجموع الفرعي:</span>
+                            <span class="fw-bold">${{ cart.get_total_price }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>الشحن:</span>
+                            <span class="text-success fw-bold">مجاني</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>الضريبة:</span>
+                            <span>${{ cart.get_total_price|floatformat:2|add:0 }}</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5 class="fw-bold">الإجمالي:</h5>
+                            <h5 class="fw-bold text-primary">${{ cart.get_total_price }}</h5>
+                        </div>
+                        
+                        {% if user.is_authenticated %}
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'orders:order_create' %}" class="btn btn-success btn-lg">
+                                    <i class="fas fa-credit-card me-2"></i>متابعة للشراء
+                                </a>
+                                <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">
+                                    <i class="fas fa-shopping-bag me-2"></i>إضافة المزيد
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'accounts:login' %}?next={% url 'orders:order_create' %}" class="btn btn-success btn-lg">
+                                    <i class="fas fa-sign-in-alt me-2"></i>تسجيل الدخول للشراء
+                                </a>
+                                <a href="{% url 'accounts:register' %}" class="btn btn-outline-success">
+                                    <i class="fas fa-user-plus me-2"></i>إنشاء حساب جديد
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- مميزات الشراء -->
+                    <div class="card-footer bg-light">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <i class="fas fa-truck text-success mb-1"></i>
+                                <small class="d-block">شحن سريع</small>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-shield-alt text-primary mb-1"></i>
+                                <small class="d-block">دفع آمن</small>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-undo text-info mb-1"></i>
+                                <small class="d-block">إرجاع مجاني</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- سلة فارغة -->
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border-0 text-center">
+                    <div class="card-body py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-shopping-cart fa-5x text-muted"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">سلة التسوق فارغة</h4>
+                        <p class="text-muted mb-4">لا توجد منتجات في سلة التسوق الخاصة بك</p>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-store me-2"></i>ابدأ التسوق الآن
+                            </a>
+                            <a href="{% url 'products:home' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-home me-2"></i>العودة للرئيسية
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function increaseQuantity(button) {
+    const input = button.parentElement.querySelector('input[name="quantity"]');
+    const max = parseInt(input.getAttribute('max'));
+    const current = parseInt(input.value);
+    if (current < max) {
+        input.value = current + 1;
+        input.form.submit();
+    }
+}
+
+function decreaseQuantity(button) {
+    const input = button.parentElement.querySelector('input[name="quantity"]');
+    const current = parseInt(input.value);
+    if (current > 1) {
+        input.value = current - 1;
+        input.form.submit();
+    }
+}
+</script>
+{% endblock %}

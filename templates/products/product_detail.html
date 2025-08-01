@@ -1,0 +1,252 @@
+<!-- Update templates/products/product_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - My Online Store{% endblock %}
+
+{% block content %}
+<div class="row fade-in">
+    <!-- Product Image -->
+    <div class="col-md-6 mb-4">
+        <div class="card border-0">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top rounded" alt="{{ product.name }}" style="height: 500px; object-fit: cover;">
+            {% else %}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 500px;">
+                    <div class="text-center">
+                        <i class="fas fa-image fa-5x text-muted mb-3"></i>
+                        <p class="text-muted">No image available</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Product Details -->
+    <div class="col-md-6">
+        <div class="card border-0 h-100">
+            <div class="card-body">
+                <!-- Category -->
+                <div class="mb-3">
+                    <a href="{{ product.category.get_absolute_url }}" class="text-decoration-none">
+                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
+                            <i class="fas fa-tag me-1"></i>{{ product.category.name }}
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Product Name -->
+                <h1 class="fw-bold mb-3">{{ product.name }}</h1>
+                
+                <!-- Rating (Temporary) -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="me-2">
+                            {% for i in "12345" %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                        <span class="text-muted">(125 reviews)</span>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                <div class="mb-4">
+                    <h6 class="fw-bold">Description:</h6>
+                    <p class="text-muted">{{ product.description|default:"No description available for this product." }}</p>
+                </div>
+                
+                <!-- Price and Stock -->
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h3 class="price-tag d-inline-block">${{ product.price }}</h3>
+                    </div>
+                    <div class="col-6 text-end">
+                        {% if product.stock > 0 %}
+                            <span class="stock-badge">
+                                <i class="fas fa-check-circle me-1"></i>In Stock ({{ product.stock }})
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                <i class="fas fa-times-circle me-1"></i>Out of Stock
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                {% if product.available and product.stock > 0 %}
+                    <form method="post" action="{% url 'cart:cart_add' product.id %}" class="mb-3">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="quantity" class="form-label small">Quantity:</label>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control">
+                            </div>
+                            <div class="col-8 d-flex align-items-end">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                {% else %}
+                    <button class="btn btn-secondary w-100 mb-3" disabled>
+                        <i class="fas fa-times me-2"></i>Currently Unavailable
+                    </button>
+                {% endif %}
+                
+                <!-- Additional Buttons -->
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-danger">
+                        <i class="fas fa-heart me-2"></i>Add to Wishlist
+                    </button>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Products
+                    </a>
+                </div>
+                
+                <!-- Additional Information -->
+                <div class="mt-4">
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">
+                                <i class="fas fa-info-circle me-2"></i>Product Information
+                            </h6>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-truck text-success me-2"></i>
+                                    Free shipping on orders over $100
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-undo text-info me-2"></i>
+                                    30-day return policy
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                                    One year warranty
+                                </li>
+                                <li>
+                                    <i class="fas fa-headset text-warning me-2"></i>
+                                    24/7 customer support
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Products -->
+{% if related_products %}
+<div class="row mt-5 fade-in">
+    <div class="col-12">
+        <h3 class="fw-bold mb-4">
+            <i class="fas fa-thumbs-up me-2 text-primary"></i>
+            You Might Also Like
+        </h3>
+        <div class="row">
+            {% for related_product in related_products %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="product-card h-100">
+                        <div class="position-relative">
+                            {% if related_product.image %}
+                                <img src="{{ related_product.image.url }}" class="card-img-top" alt="{{ related_product.name }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">{{ related_product.name }}</h6>
+                            <p class="card-text text-muted small flex-grow-1">{{ related_product.description|truncatewords:8 }}</p>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="price-tag small">${{ related_product.price }}</span>
+                                    <small class="stock-badge">{{ related_product.stock }}</small>
+                                </div>
+                                
+                                <div class="d-grid gap-1">
+                                    <a href="{{ related_product.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </a>
+                                    <a href="{% url 'cart:cart_add' related_product.id %}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Customer Reviews (Temporary Section) -->
+<div class="row mt-5 fade-in">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-header bg-transparent">
+                <h5 class="fw-bold mb-0">
+                    <i class="fas fa-comments me-2"></i>Customer Reviews
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Temporary Review -->
+                <div class="d-flex mb-3 pb-3 border-bottom">
+                    <div class="me-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-2">
+                            <h6 class="mb-0 me-3">Ahmed Mohamed</h6>
+                            <div class="me-2">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% endfor %}
+                            </div>
+                            <small class="text-muted">2 days ago</small>
+                        </div>
+                        <p class="mb-0">Excellent product with amazing quality, highly recommend buying it. Fast shipping and professional packaging.</p>
+                    </div>
+                </div>
+                
+                <div class="d-flex mb-3 pb-3 border-bottom">
+                    <div class="me-3">
+                        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-2">
+                            <h6 class="mb-0 me-3">Sarah Ahmed</h6>
+                            <div class="me-2">
+                                {% for i in "1234" %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% endfor %}
+                                <i class="far fa-star text-warning"></i>
+                            </div>
+                            <small class="text-muted">1 week ago</small>
+                        </div>
+                        <p class="mb-0">Good product but delivery was slightly delayed. Overall satisfied with the purchase.</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-2"></i>Add Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
