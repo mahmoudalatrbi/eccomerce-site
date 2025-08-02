@@ -1,14 +1,14 @@
 <!-- templates/registration/register.html -->
 {% extends 'base.html' %}
 
-{% block title %}إنشاء حساب جديد{% endblock %}
+{% block title %}Create New Account{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header text-center">
-                <h4><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h4>
+                <h4><i class="fas fa-user-plus me-2"></i> Create New Account</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -26,32 +26,32 @@
                     {% endif %}
                     
                     <div class="mb-3">
-                        <label for="id_username" class="form-label">اسم المستخدم:</label>
+                        <label for="id_username" class="form-label">Username:</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                             <input type="text" name="username" class="form-control" id="id_username" required>
                         </div>
-                        <small class="form-text text-muted">مطلوب. 150 حرف أو أقل. أحرف وأرقام و @/./+/-/_ فقط.</small>
+                        <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="id_password1" class="form-label">كلمة المرور:</label>
+                        <label for="id_password1" class="form-label">Password:</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                             <input type="password" name="password1" class="form-control" id="id_password1" required>
                         </div>
                         <small class="form-text text-muted">
                             <ul class="mb-0">
-                                <li>كلمة المرور لا يمكن أن تكون مشابهة جداً لمعلوماتك الشخصية الأخرى.</li>
-                                <li>كلمة المرور يجب أن تحتوي على الأقل 8 أحرف.</li>
-                                <li>كلمة المرور لا يمكن أن تكون كلمة مرور شائعة الاستخدام.</li>
-                                <li>كلمة المرور لا يمكن أن تكون أرقام فقط.</li>
+                                <li>Your password can't be too similar to your other personal information.</li>
+                                <li>Your password must contain at least 8 characters.</li>
+                                <li>Your password can't be a commonly used password.</li>
+                                <li>Your password can't be entirely numeric.</li>
                             </ul>
                         </small>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="id_password2" class="form-label">تأكيد كلمة المرور:</label>
+                        <label for="id_password2" class="form-label">Confirm Password:</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                             <input type="password" name="password2" class="form-control" id="id_password2" required>
@@ -60,13 +60,13 @@
                     
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success">
-                            <i class="fas fa-user-plus"></i> إنشاء الحساب
+                            <i class="fas fa-user-plus me-2"></i> Create Account
                         </button>
                     </div>
                 </form>
                 
                 <div class="text-center mt-3">
-                    <p>تملك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a></p>
+                    <p>Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
                 </div>
             </div>
         </div>

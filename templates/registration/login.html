@@ -1,14 +1,14 @@
 <!-- templates/registration/login.html -->
 {% extends 'base.html' %}
 
-{% block title %}تسجيل الدخول{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header text-center">
-                <h4><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h4>
+                <h4><i class="fas fa-sign-in-alt me-2"></i> Login</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -21,7 +21,7 @@
                     {% endif %}
                     
                     <div class="mb-3">
-                        <label for="id_username" class="form-label">اسم المستخدم:</label>
+                        <label for="id_username" class="form-label">Username:</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                             <input type="text" name="username" class="form-control" id="id_username" required>
@@ -29,7 +29,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="id_password" class="form-label">كلمة المرور:</label>
+                        <label for="id_password" class="form-label">Password:</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                             <input type="password" name="password" class="form-control" id="id_password" required>
@@ -38,13 +38,13 @@
                     
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                            <i class="fas fa-sign-in-alt me-2"></i> Login
                         </button>
                     </div>
                 </form>
                 
                 <div class="text-center mt-3">
-                    <p>لا تملك حساب؟ <a href="{% url 'accounts:register' %}">إنشاء حساب جديد</a></p>
+                    <p>Don't have an account? <a href="{% url 'accounts:register' %}">Create new account</a></p>
                 </div>
             </div>
         </div>

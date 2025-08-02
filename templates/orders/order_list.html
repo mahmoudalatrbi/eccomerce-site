@@ -1,15 +1,15 @@
 <!-- templates/orders/order_list.html -->
 {% extends 'base.html' %}
 
-{% block title %}طلباتي - متجري الإلكتروني{% endblock %}
+{% block title %}My Orders - My Online Store{% endblock %}
 
 {% block content %}
 <div class="d-flex align-items-center justify-content-between mb-4">
     <h2 class="fw-bold">
-        <i class="fas fa-shopping-bag me-2 text-primary"></i>طلباتي
+        <i class="fas fa-shopping-bag me-2 text-primary"></i>My Orders
     </h2>
     <a href="{% url 'products:product_list' %}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>طلب جديد
+        <i class="fas fa-plus me-2"></i>New Order
     </a>
 </div>
 
@@ -22,7 +22,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0 fw-bold">
                                 <i class="fas fa-receipt me-2 text-primary"></i>
-                                طلب #{{ order.id }}
+                                Order #{{ order.id }}
                             </h6>
                             <div class="status-badge 
                                 {% if order.status == 'pending' %}status-pending
@@ -31,11 +31,11 @@
                                 {% elif order.status == 'delivered' %}status-delivered
                                 {% elif order.status == 'cancelled' %}status-cancelled
                                 {% endif %}">
-                                {% if order.status == 'pending' %}قيد الانتظار
-                                {% elif order.status == 'processing' %}قيد المعالجة
-                                {% elif order.status == 'shipped' %}تم الشحن
-                                {% elif order.status == 'delivered' %}تم التسليم
-                                {% elif order.status == 'cancelled' %}ملغي
+                                {% if order.status == 'pending' %}Pending
+                                {% elif order.status == 'processing' %}Processing
+                                {% elif order.status == 'shipped' %}Shipped
+                                {% elif order.status == 'delivered' %}Delivered
+                                {% elif order.status == 'cancelled' %}Cancelled
                                 {% endif %}
                             </div>
                         </div>
@@ -43,17 +43,17 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-6">
-                                <small class="text-muted">تاريخ الطلب</small>
-                                <p class="mb-0 fw-bold">{{ order.created|date:"d/m/Y" }}</p>
+                                <small class="text-muted">Order Date</small>
+                                <p class="mb-0 fw-bold">{{ order.created|date:"m/d/Y" }}</p>
                             </div>
                             <div class="col-6 text-end">
-                                <small class="text-muted">المبلغ الإجمالي</small>
+                                <small class="text-muted">Total Amount</small>
                                 <p class="mb-0"><span class="price-tag">${{ order.total_amount }}</span></p>
                             </div>
                         </div>
                         
                         <div class="mb-3">
-                            <small class="text-muted">العناصر ({{ order.items.count }})</small>
+                            <small class="text-muted">Items ({{ order.items.count }})</small>
                             <div class="d-flex flex-wrap mt-1">
                                 {% for item in order.items.all|slice:":3" %}
                                     {% if item.product.image %}
@@ -75,7 +75,7 @@
                         
                         <div class="d-grid">
                             <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-primary">
-                                <i class="fas fa-eye me-2"></i>عرض التفاصيل
+                                <i class="fas fa-eye me-2"></i>View Details
                             </a>
                         </div>
                     </div>
@@ -87,18 +87,18 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card border-0 text-center">
-                                <div class="card-body py-5">
+                <div class="card-body py-5">
                     <div class="mb-4">
                         <i class="fas fa-shopping-bag fa-5x text-muted"></i>
                     </div>
-                    <h4 class="fw-bold mb-3">لا توجد طلبات بعد</h4>
-                    <p class="text-muted mb-4">لم تقم بإنشاء أي طلبات حتى الآن. ابدأ التسوق واستمتع بتجربة رائعة!</p>
+                    <h4 class="fw-bold mb-3">No orders yet</h4>
+                    <p class="text-muted mb-4">You haven't created any orders yet. Start shopping and enjoy a great experience!</p>
                     <div class="d-grid gap-2">
                         <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
-                            <i class="fas fa-store me-2"></i>ابدأ التسوق الآن
+                            <i class="fas fa-store me-2"></i>Start Shopping Now
                         </a>
                         <a href="{% url 'products:home' %}" class="btn btn-outline-primary">
-                            <i class="fas fa-home me-2"></i>العودة للرئيسية
+                            <i class="fas fa-home me-2"></i>Back to Home
                         </a>
                     </div>
                 </div>

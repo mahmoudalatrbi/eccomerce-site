@@ -1,7 +1,7 @@
 <!-- templates/orders/order_detail.html -->
 {% extends 'base.html' %}
 
-{% block title %}فاتورة الطلب #{{ order.id }} - متجري الإلكتروني{% endblock %}
+{% block title %}Order Invoice #{{ order.id }} - My Online Store{% endblock %}
 
 {% block content %}
 <!-- Invoice Card -->
@@ -11,12 +11,12 @@
         <div class="row align-items-center">
             <div class="col-md-4">
                 <h2 class="mb-0">
-                    <i class="fas fa-store-alt me-2"></i>متجري الإلكتروني
+                    <i class="fas fa-store-alt me-2"></i>My Online Store
                 </h2>
-                <p class="mb-0 opacity-75">فاتورة مبيعات</p>
+                <p class="mb-0 opacity-75">Sales Invoice</p>
             </div>
             <div class="col-md-4">
-                <h1 class="display-6 fw-bold mb-0">فاتورة</h1>
+                <h1 class="display-6 fw-bold mb-0">Invoice</h1>
                 <p class="mb-0">#{{ order.id }}</p>
             </div>
             <div class="col-md-4">
@@ -34,11 +34,11 @@
                         {% elif order.status == 'delivered' %}fa-check-circle
                         {% elif order.status == 'cancelled' %}fa-times-circle
                         {% endif %} me-2"></i>
-                    {% if order.status == 'pending' %}قيد الانتظار
-                    {% elif order.status == 'processing' %}قيد المعالجة
-                    {% elif order.status == 'shipped' %}تم الشحن
-                    {% elif order.status == 'delivered' %}تم التسليم
-                    {% elif order.status == 'cancelled' %}ملغي
+                    {% if order.status == 'pending' %}Pending
+                    {% elif order.status == 'processing' %}Processing
+                    {% elif order.status == 'shipped' %}Shipped
+                    {% elif order.status == 'delivered' %}Delivered
+                    {% elif order.status == 'cancelled' %}Cancelled
                     {% endif %}
                 </div>
             </div>
@@ -47,18 +47,18 @@
     
     <!-- Invoice Body -->
     <div class="p-4">
-        <!-- معلومات العميل والطلب -->
+        <!-- Customer and Order Information -->
         <div class="row mb-4">
             <div class="col-md-6">
                 <div class="card border-0 bg-light">
                     <div class="card-body">
                         <h6 class="fw-bold text-primary mb-3">
-                            <i class="fas fa-user me-2"></i>معلومات العميل
+                            <i class="fas fa-user me-2"></i>Customer Information
                         </h6>
-                        <p class="mb-2"><strong>الاسم:</strong> {{ order.first_name }} {{ order.last_name }}</p>
-                        <p class="mb-2"><strong>البريد الإلكتروني:</strong> {{ order.email }}</p>
-                        <p class="mb-2"><strong>العنوان:</strong> {{ order.address }}</p>
-                        <p class="mb-0"><strong>المدينة:</strong> {{ order.city }} - {{ order.postal_code }}</p>
+                        <p class="mb-2"><strong>Name:</strong> {{ order.first_name }} {{ order.last_name }}</p>
+                        <p class="mb-2"><strong>Email:</strong> {{ order.email }}</p>
+                        <p class="mb-2"><strong>Address:</strong> {{ order.address }}</p>
+                        <p class="mb-0"><strong>City:</strong> {{ order.city }} - {{ order.postal_code }}</p>
                     </div>
                 </div>
             </div>
@@ -66,22 +66,22 @@
                 <div class="card border-0 bg-light">
                     <div class="card-body">
                         <h6 class="fw-bold text-primary mb-3">
-                            <i class="fas fa-info-circle me-2"></i>معلومات الطلب
+                            <i class="fas fa-info-circle me-2"></i>Order Information
                         </h6>
-                        <p class="mb-2"><strong>رقم الطلب:</strong> #{{ order.id }}</p>
-                        <p class="mb-2"><strong>تاريخ الطلب:</strong> {{ order.created|date:"d/m/Y H:i" }}</p>
-                        <p class="mb-2"><strong>آخر تحديث:</strong> {{ order.updated|date:"d/m/Y H:i" }}</p>
-                        <p class="mb-0"><strong>إجمالي المبلغ:</strong> <span class="price-tag">${{ order.total_amount }}</span></p>
+                        <p class="mb-2"><strong>Order Number:</strong> #{{ order.id }}</p>
+                        <p class="mb-2"><strong>Order Date:</strong> {{ order.created|date:"m/d/Y H:i" }}</p>
+                        <p class="mb-2"><strong>Last Updated:</strong> {{ order.updated|date:"m/d/Y H:i" }}</p>
+                        <p class="mb-0"><strong>Total Amount:</strong> <span class="price-tag">${{ order.total_amount }}</span></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- عناصر الطلب -->
+        <!-- Order Items -->
         <div class="card border-0">
             <div class="card-header bg-primary text-white">
                 <h6 class="mb-0">
-                    <i class="fas fa-box me-2"></i>تفاصيل الطلب
+                    <i class="fas fa-box me-2"></i>Order Details
                 </h6>
             </div>
             <div class="card-body p-0">
@@ -89,10 +89,10 @@
                     <table class="table table-hover mb-0">
                         <thead class="bg-light">
                             <tr>
-                                <th class="border-0 px-4 py-3">المنتج</th>
-                                <th class="border-0 text-center py-3">السعر</th>
-                                <th class="border-0 text-center py-3">الكمية</th>
-                                <th class="border-0 text-center py-3">الإجمالي</th>
+                                <th class="border-0 px-4 py-3">Product</th>
+                                <th class="border-0 text-center py-3">Price</th>
+                                <th class="border-0 text-center py-3">Quantity</th>
+                                <th class="border-0 text-center py-3">Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -136,27 +136,27 @@
             </div>
         </div>
 
-        <!-- الإجماليات -->
+        <!-- Totals -->
         <div class="row mt-4">
             <div class="col-md-8"></div>
             <div class="col-md-4">
                 <div class="card border-0" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
-                            <span>المجموع الفرعي:</span>
+                            <span>Subtotal:</span>
                             <span class="fw-bold">${{ order.total_amount }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>الضريبة (0%):</span>
+                            <span>Tax (0%):</span>
                             <span class="fw-bold">$0.00</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>الشحن:</span>
-                            <span class="fw-bold text-success">مجاني</span>
+                            <span>Shipping:</span>
+                            <span class="fw-bold text-success">Free</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold">الإجمالي النهائي:</h6>
+                            <h6 class="fw-bold">Final Total:</h6>
                             <h6 class="fw-bold text-primary">${{ order.total_amount }}</h6>
                         </div>
                     </div>
@@ -164,26 +164,26 @@
             </div>
         </div>
 
-        <!-- معلومات إضافية -->
+        <!-- Additional Information -->
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="card border-0 bg-light">
                     <div class="card-body">
                         <h6 class="fw-bold text-info mb-3">
-                            <i class="fas fa-truck me-2"></i>معلومات الشحن
+                            <i class="fas fa-truck me-2"></i>Shipping Information
                         </h6>
                         <ul class="list-unstyled mb-0">
                             <li class="mb-2">
                                 <i class="fas fa-clock text-warning me-2"></i>
-                                وقت التسليم المتوقع: 3-5 أيام عمل
+                                Expected delivery time: 3-5 business days
                             </li>
                             <li class="mb-2">
                                 <i class="fas fa-shield-alt text-success me-2"></i>
-                                الطلب مؤمن ضد التلف والفقدان
+                                Order insured against damage and loss
                             </li>
                             <li>
                                 <i class="fas fa-phone text-primary me-2"></i>
-                                للاستفسار: +966 12 345 6789
+                                For inquiries: +1 234 567 8900
                             </li>
                         </ul>
                     </div>
@@ -193,20 +193,20 @@
                 <div class="card border-0 bg-light">
                     <div class="card-body">
                         <h6 class="fw-bold text-success mb-3">
-                            <i class="fas fa-undo me-2"></i>سياسة الإرجاع
+                            <i class="fas fa-undo me-2"></i>Return Policy
                         </h6>
                         <ul class="list-unstyled mb-0">
                             <li class="mb-2">
                                 <i class="fas fa-check text-success me-2"></i>
-                                إرجاع مجاني خلال 30 يوم
+                                Free returns within 30 days
                             </li>
                             <li class="mb-2">
                                 <i class="fas fa-check text-success me-2"></i>
-                                استرداد كامل للمبلغ
+                                Full refund guaranteed
                             </li>
                             <li>
                                 <i class="fas fa-check text-success me-2"></i>
-                                لا توجد رسوم إضافية
+                                No additional fees
                             </li>
                         </ul>
                     </div>
@@ -214,12 +214,12 @@
             </div>
         </div>
 
-        <!-- أزرار العمليات -->
+        <!-- Action Buttons -->
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="d-grid gap-2">
                     <a href="{% url 'orders:order_list' %}" class="btn btn-outline-primary">
-                        <i class="fas fa-arrow-right me-2"></i>العودة لقائمة الطلبات
+                        <i class="fas fa-arrow-left me-2"></i>Back to Orders List
                     </a>
                 </div>
             </div>
@@ -227,25 +227,25 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     {% if order.status == 'pending' %}
                         <button class="btn btn-outline-danger me-md-2" onclick="cancelOrder()">
-                            <i class="fas fa-times me-2"></i>إلغاء الطلب
+                            <i class="fas fa-times me-2"></i>Cancel Order
                         </button>
                     {% endif %}
                     <button class="btn btn-success" onclick="window.print()">
-                        <i class="fas fa-print me-2"></i>طباعة الفاتورة
+                        <i class="fas fa-print me-2"></i>Print Invoice
                     </button>
                     <button class="btn btn-primary" onclick="downloadPDF()">
-                        <i class="fas fa-download me-2"></i>تحميل PDF
+                        <i class="fas fa-download me-2"></i>Download PDF
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- شكر العميل -->
+        <!-- Customer Thank You -->
         <div class="text-center mt-5 p-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
             <h4 class="fw-bold mb-2">
-                <i class="fas fa-heart me-2"></i>شكراً لك على اختيارنا!
+                <i class="fas fa-heart me-2"></i>Thank you for choosing us!
             </h4>
-            <p class="mb-0">نقدر ثقتك بنا ونتطلع لخدمتك مرة أخرى</p>
+            <p class="mb-0">We appreciate your trust and look forward to serving you again</p>
         </div>
     </div>
 </div>
@@ -272,15 +272,15 @@
 
 <script>
 function cancelOrder() {
-    if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟')) {
-        // إضافة كود إلغاء الطلب هنا
-        alert('تم إلغاء الطلب بنجاح');
+    if (confirm('Are you sure you want to cancel this order?')) {
+        // Add cancel order code here
+        alert('Order cancelled successfully');
     }
 }
 
 function downloadPDF() {
-    // إضافة كود تحميل PDF هنا
-    alert('سيتم إضافة هذه الميزة قريباً');
+    // Add PDF download code here
+    alert('This feature will be added soon');
 }
 </script>
 {% endblock %}

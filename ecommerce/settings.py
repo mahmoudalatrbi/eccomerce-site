@@ -1,16 +1,15 @@
-# ecommerce/settings.py
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'
+# Generate a new secret key - COPY THIS EXACTLY
+SECRET_KEY = 'django-insecure-9k8n2x5z7w4q1r6t3y8u0i9o5p2s4d7f9g1h3j6k8l0m2n5q7r9t2w4e6r8t0y'
+
 DEBUG = True
-ALLOWED_HOSTS = []
-# ecommerce/settings.py
+
+ALLOWED_HOSTS = ['*']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,15 +17,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # التطبيقات الخاصة بنا
+    'rest_framework',
+    'corsheaders',
+    # Your apps
     'products',
-    'accounts',
     'cart',
     'orders',
+    'accounts',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,7 +50,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart', 
             ],
         },
     },
@@ -63,6 +63,19 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -84,18 +97,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login URLs
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

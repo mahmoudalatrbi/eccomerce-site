@@ -1,16 +1,16 @@
 <!-- templates/orders/order_create.html -->
 {% extends 'base.html' %}
 
-{% block title %}إتمام الطلب{% endblock %}
+{% block title %}Checkout{% endblock %}
 
 {% block content %}
 <div class="row">
-    <!-- نموذج معلومات الشحن -->
+    <!-- Shipping Information Form -->
     <div class="col-lg-8 mb-4">
         <div class="card border-0">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">
-                    <i class="fas fa-shipping-fast me-2"></i>معلومات الشحن والفوترة
+                    <i class="fas fa-shipping-fast me-2"></i>Shipping & Billing Information
                 </h5>
             </div>
             <div class="card-body p-4">
@@ -20,7 +20,7 @@
                     {% if form.errors %}
                         <div class="alert alert-danger">
                             <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>يرجى تصحيح الأخطاء التالية:</strong>
+                            <strong>Please correct the following errors:</strong>
                             <ul class="mb-0 mt-2">
                                 {% for field, errors in form.errors.items %}
                                     {% for error in errors %}
@@ -31,11 +31,11 @@
                         </div>
                     {% endif %}
                     
-                    <!-- معلومات شخصية -->
+                    <!-- Personal Information -->
                     <div class="row mb-4">
                         <div class="col-12">
                             <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
-                                <i class="fas fa-user me-2"></i>المعلومات الشخصية
+                                <i class="fas fa-user me-2"></i>Personal Information
                             </h6>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -61,11 +61,11 @@
                         </div>
                     </div>
                     
-                    <!-- معلومات العنوان -->
+                    <!-- Address Information -->
                     <div class="row mb-4">
                         <div class="col-12">
                             <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
-                                <i class="fas fa-map-marker-alt me-2"></i>عنوان التسليم
+                                <i class="fas fa-map-marker-alt me-2"></i>Delivery Address
                             </h6>
                         </div>
                         <div class="col-12 mb-3">
@@ -91,11 +91,11 @@
                         </div>
                     </div>
                     
-                    <!-- طرق الدفع -->
+                    <!-- Payment Methods -->
                     <div class="row mb-4">
                         <div class="col-12">
                             <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
-                                <i class="fas fa-credit-card me-2"></i>طريقة الدفع
+                                <i class="fas fa-credit-card me-2"></i>Payment Method
                             </h6>
                             <div class="card bg-light border-0">
                                 <div class="card-body">
@@ -105,8 +105,8 @@
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-hand-holding-usd me-2 text-success fa-2x"></i>
                                                 <div>
-                                                    <div>الدفع عند الاستلام</div>
-                                                    <small class="text-muted">ادفع نقداً عند وصول الطلب إليك</small>
+                                                    <div>Cash on Delivery</div>
+                                                    <small class="text-muted">Pay cash when the order arrives</small>
                                                 </div>
                                             </div>
                                         </label>
@@ -116,13 +116,13 @@
                         </div>
                     </div>
                     
-                    <!-- شروط وأحكام -->
+                    <!-- Terms and Conditions -->
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="terms" required>
                                 <label class="form-check-label" for="terms">
-                                    أوافق على <a href="#" class="text-primary">الشروط والأحكام</a> و <a href="#" class="text-primary">سياسة الخصوصية</a>
+                                    I agree to the <a href="#" class="text-primary">Terms and Conditions</a> and <a href="#" class="text-primary">Privacy Policy</a>
                                 </label>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                     
                     <div class="d-grid">
                         <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
-                            <i class="fas fa-check-circle me-2"></i>تأكيد الطلب ومتابعة
+                            <i class="fas fa-check-circle me-2"></i>Confirm Order & Continue
                         </button>
                     </div>
                 </form>
@@ -138,16 +138,16 @@
         </div>
     </div>
     
-    <!-- ملخص الطلب -->
+    <!-- Order Summary -->
     <div class="col-lg-4">
         <div class="card border-0 sticky-top" style="top: 20px;">
             <div class="card-header bg-success text-white">
                 <h5 class="mb-0">
-                    <i class="fas fa-receipt me-2"></i>ملخص الطلب
+                    <i class="fas fa-receipt me-2"></i>Order Summary
                 </h5>
             </div>
             <div class="card-body">
-                <!-- المنتجات -->
+                <!-- Products -->
                 <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
                     {% for item in cart.items.all %}
                         <div class="d-flex align-items-center mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
@@ -174,72 +174,72 @@
                     {% endfor %}
                 </div>
                 
-                <!-- الحسابات -->
+                <!-- Calculations -->
                 <div class="mb-3">
                     <div class="d-flex justify-content-between mb-2">
-                        <span>المجموع الفرعي:</span>
+                        <span>Subtotal:</span>
                         <span class="fw-bold">${{ cart.get_total_price }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>الضريبة (0%):</span>
+                        <span>Tax (0%):</span>
                         <span class="fw-bold">$0.00</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>الشحن:</span>
-                        <span class="fw-bold text-success">مجاني</span>
+                        <span>Shipping:</span>
+                        <span class="fw-bold text-success">Free</span>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
-                        <h5 class="fw-bold">الإجمالي:</h5>
+                        <h5 class="fw-bold">Total:</h5>
                         <h5 class="fw-bold"><span class="price-tag">${{ cart.get_total_price }}</span></h5>
                     </div>
                 </div>
             </div>
             
-            <!-- مميزات الخدمة -->
+            <!-- Service Features -->
             <div class="card-footer bg-light">
                 <div class="row text-center">
                     <div class="col-4">
                         <i class="fas fa-truck text-success fa-2x mb-2"></i>
-                        <small class="d-block fw-bold">شحن سريع</small>
-                        <small class="text-muted">3-5 أيام</small>
+                        <small class="d-block fw-bold">Fast Shipping</small>
+                        <small class="text-muted">3-5 days</small>
                     </div>
                     <div class="col-4">
                         <i class="fas fa-shield-alt text-primary fa-2x mb-2"></i>
-                        <small class="d-block fw-bold">دفع آمن</small>
-                        <small class="text-muted">محمي 100%</small>
+                        <small class="d-block fw-bold">Secure Payment</small>
+                        <small class="text-muted">100% Protected</small>
                     </div>
                     <div class="col-4">
                         <i class="fas fa-undo text-info fa-2x mb-2"></i>
-                        <small class="d-block fw-bold">إرجاع مجاني</small>
-                        <small class="text-muted">30 يوم</small>
+                        <small class="d-block fw-bold">Free Returns</small>
+                        <small class="text-muted">30 days</small>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- معلومات إضافية -->
+        <!-- Additional Information -->
         <div class="card border-0 mt-3">
             <div class="card-body">
                 <h6 class="fw-bold text-primary mb-3">
-                    <i class="fas fa-info-circle me-2"></i>معلومات هامة
+                    <i class="fas fa-info-circle me-2"></i>Important Information
                 </h6>
                 <ul class="list-unstyled mb-0">
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        <small>سيتم تأكيد الطلب خلال ساعة</small>
+                        <small>Order will be confirmed within an hour</small>
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        <small>إمكانية تتبع الطلب عبر الموقع</small>
+                        <small>Track your order through the website</small>
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        <small>خدمة عملاء متاحة 24/7</small>
+                        <small>24/7 customer service available</small>
                     </li>
                     <li>
                         <i class="fas fa-check text-success me-2"></i>
-                        <small>ضمان استرداد المبلغ كاملاً</small>
+                        <small>Full money-back guarantee</small>
                     </li>
                 </ul>
             </div>
@@ -248,24 +248,24 @@
 </div>
 
 <script>
-// تحسين تجربة إرسال النموذج
+// Improve form submission experience
 document.getElementById('orderForm').addEventListener('submit', function(e) {
     const submitBtn = document.getElementById('submitBtn');
     const originalText = submitBtn.innerHTML;
     
-    // التحقق من الشروط والأحكام
+    // Check terms and conditions
     const termsCheckbox = document.getElementById('terms');
     if (!termsCheckbox.checked) {
         e.preventDefault();
-        alert('يرجى الموافقة على الشروط والأحكام');
+        alert('Please agree to the Terms and Conditions');
         return;
     }
     
-    // تغيير نص الزر
-    submitBtn.innerHTML = '<span class="loading-spinner me-2"></span>جاري معالجة الطلب...';
+    // Change button text
+    submitBtn.innerHTML = '<span class="loading-spinner me-2"></span>Processing order...';
     submitBtn.disabled = true;
     
-    // إعادة تفعيل الزر في حالة فشل الإرسال
+    // Re-enable button in case of submission failure
     setTimeout(() => {
         if (submitBtn.disabled) {
             submitBtn.innerHTML = originalText;
@@ -274,7 +274,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e) {
     }, 10000);
 });
 
-// التحقق من صحة البيانات أثناء الكتابة
+// Validate data while typing
 document.querySelectorAll('input[required]').forEach(input => {
     input.addEventListener('blur', function() {
         if (this.value.trim() === '') {
