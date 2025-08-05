@@ -40,7 +40,7 @@ function Home() {
   return (
     <Container>
       {/* Hero Section */}
-      <div className="text-center py-5 mb-5 bg-primary text-white rounded">
+      <div className="text-center py-5 mb-5 bg-dark text-white rounded">
         <h1 className="display-5 fw-bold mb-3">
           <i className="fas fa-gem me-2"></i>
           {t('Welcome to Our Store')}
@@ -60,7 +60,7 @@ function Home() {
       <Row className="mb-5">
         <Col>
           <h3 className="mb-4">
-            <i className="fas fa-th-large me-2 text-primary"></i>
+            <i className="fas fa-th-large me-2 text-dark"></i>
             {t('Shop by Category')}
           </h3>
           <Row>
@@ -73,7 +73,7 @@ function Home() {
                   <Card className="text-center h-100 category-card">
                     <Card.Body>
                       <div className="mb-2">
-                        <i className="fas fa-tag fa-2x text-primary"></i>
+                        <i className="fas fa-tag fa-2x text-dark"></i>
                       </div>
                       <Card.Title className="h6">{category.name}</Card.Title>
                       <small className="text-muted">

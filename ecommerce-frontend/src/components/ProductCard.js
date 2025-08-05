@@ -52,7 +52,7 @@ function ProductCard({ product }) {
           
           <div className="mt-auto">
             <div className="d-flex justify-content-between align-items-center mb-2">
-              <span className="h6 text-primary mb-0">${product.price}</span>
+              <span className="h6 text-dark mb-0">${product.price}</span>
               <small className="text-muted">
                 {t('Stock')}: {product.stock}
               </small>
@@ -62,7 +62,7 @@ function ProductCard({ product }) {
               <Button 
                 as={Link} 
                 to={`/products/${product.slug}`} 
-                variant="outline-primary" 
+                variant="outline-dark" 
                 size="sm"
               >
                 <i className="fas fa-eye me-1"></i>
@@ -70,7 +70,7 @@ function ProductCard({ product }) {
               </Button>
               <Button 
                 onClick={handleAddToCart}
-                variant="primary" 
+                variant="dark" 
                 size="sm"
                 disabled={product.stock === 0 || adding}
               >
