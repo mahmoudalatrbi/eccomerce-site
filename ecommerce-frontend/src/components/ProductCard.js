@@ -1,4 +1,4 @@
-// src/components/ProductCard.js (محدث)
+// src/components/ProductCard.js
 import React, { useState } from 'react';
 import { Card, Button, Toast, ToastContainer } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -11,20 +11,34 @@ function ProductCard({ product }) {
   const [adding, setAdding] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success');
 
   const handleAddToCart = async () => {
     setAdding(true);
-    const result = await addToCart(product.id);
     
-    if (result.success) {
-      setToastMessage(t('Product added to cart successfully!'));
-      setShowToast(true);
-    } else {
+    try {
+      console.log('Adding product to cart:', product.id); // للتشخيص
+      const result = await addToCart(product.id, 1);
+      
+      console.log('Add to cart result:', result); // للتشخيص
+      
+      if (result.success) {
+        setToastMessage(t('Product added to cart successfully!'));
+        setToastVariant('success');
+        setShowToast(true);
+      } else {
+        setToastMessage(result.error || t('Failed to add product to cart'));
+        setToastVariant('danger');
+        setShowToast(true);
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
       setToastMessage(t('Failed to add product to cart'));
+      setToastVariant('danger');
       setShowToast(true);
+    } finally {
+      setAdding(false);
     }
-    
-    setAdding(false);
   };
 
   return (
@@ -98,8 +112,11 @@ function ProductCard({ product }) {
           onClose={() => setShowToast(false)}
           delay={3000}
           autohide
+          bg={toastVariant}
         >
-          <Toast.Body>{toastMessage}</Toast.Body>
+          <Toast.Body className={toastVariant === 'success' ? 'text-white' : 'text-white'}>
+            {toastMessage}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
     </>

@@ -40,7 +40,7 @@ function Home() {
   return (
     <Container>
       {/* Hero Section */}
-      <div className="text-center py-5 mb-5 bg-dark text-white rounded">
+      <div className="text-center py-5 my-5 bg-dark text-white rounded">
         <h1 className="display-5 fw-bold mb-3">
           <i className="fas fa-gem me-2"></i>
           {t('Welcome to Our Store')}

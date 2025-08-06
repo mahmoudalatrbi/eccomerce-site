@@ -9,6 +9,6 @@ urlpatterns = [
     
     # Apps APIs
     path('products/', include('products.urls')),
-    path('cart/', include('cart.urls')),
+    path('api/cart/', include('cart.urls')), 
     path('orders/', include('orders.urls')),
 ]

@@ -16,27 +16,72 @@ function Cart() {
     cartItemsCount,
     cartTotal
   } = useCart();
-  
+
   const [updating, setUpdating] = useState({});
 
-  const handleUpdateQuantity = async (itemId, newQuantity) => {
+  // src/pages/Cart.js (محدث الجزء المتعلق بالتحديث والحذف)
+  const handleUpdateQuantity = async (productId, newQuantity) => {
     if (newQuantity < 1) return;
-    
-    setUpdating(prev => ({ ...prev, [itemId]: true }));
-    await updateCartItem(itemId, newQuantity);
-    setUpdating(prev => ({ ...prev, [itemId]: false }));
+
+    setUpdating(prev => ({ ...prev, [productId]: true }));
+    await updateCartItem(productId, newQuantity);
+    setUpdating(prev => ({ ...prev, [productId]: false }));
   };
 
-  const handleRemoveItem = async (itemId) => {
+
+
+  // في render، استخدم product.id بدلاً من item.id
+  {
+    cart.items.map((item) => (
+      <div
+        key={item.product.id}
+        className="d-flex align-items-center p-4 border-bottom"
+      >
+        {/* ... باقي الكود */}
+
+        {/* Quantity Controls */}
+        <div className="me-3">
+          <div className="input-group" style={{ width: '130px' }}>
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)}
+              disabled={updating[item.product.id] || item.quantity <= 1}
+            >
+              <i className="fas fa-minus"></i>
+            </Button>
+            {/* ... باقي controls */}
+          </div>
+        </div>
+
+        {/* Remove Button */}
+        <div>
+          <Button
+            variant="outline-danger"
+            size="sm"
+            onClick={() => handleRemoveItem(item.product.id)}
+            disabled={updating[item.product.id]}
+            title={t('Remove from cart')}
+          >
+            {updating[item.product.id] ? (
+              <span className="spinner-border spinner-border-sm"></span>
+            ) : (
+              <i className="fas fa-trash"></i>
+            )}
+          </Button>
+        </div>
+      </div>
+    ))
+  }
+  const handleRemoveItem = async (productId) => {
     if (!window.confirm(t('Are you sure you want to remove this product?'))) {
       return;
     }
 
-    setUpdating(prev => ({ ...prev, [itemId]: true }));
-    await removeFromCart(itemId);
-    setUpdating(prev => ({ ...prev, [itemId]: false }));
+    setUpdating(prev => ({ ...prev, [productId]: true }));
+    await removeFromCart(productId);
+    setUpdating(prev => ({ ...prev, [productId]: false }));
   };
-
   if (loading) return <LoadingSpinner />;
 
   return (
@@ -64,7 +109,7 @@ function Cart() {
               </Card.Header>
               <Card.Body className="p-0">
                 {cart.items.map((item) => (
-                  <div 
+                  <div
                     key={item.id}
                     className="d-flex align-items-center p-4 border-bottom"
                   >
@@ -78,7 +123,7 @@ function Cart() {
                           style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                         />
                       ) : (
-                        <div 
+                        <div
                           className="bg-light rounded d-flex align-items-center justify-content-center"
                           style={{ width: '80px', height: '80px' }}
                         >
@@ -105,8 +150,8 @@ function Cart() {
                         <Button
                           variant="outline-secondary"
                           size="sm"
-                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                          disabled={updating[item.id] || item.quantity <= 1}
+                          onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)}
+                          disabled={updating[item.product.id] || item.quantity <= 1}
                         >
                           <i className="fas fa-minus"></i>
                         </Button>
